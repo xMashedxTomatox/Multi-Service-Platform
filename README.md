@@ -17,10 +17,19 @@ Designed to be **extensible**, allowing new services to be added alongside exist
 ---
 
 ## 🏗️ Architecture
-User -> AWS ALB (Ingress)
-         ├─ /auth     -> Auth Service (Go) <-> Redis -> PostgreSQL (auth)
-         └─ /feedback -> Feedback Service (Go) <-> Redis -> PostgreSQL (feedback)
 
+```mermaid
+flowchart TB
+  user(User / Client)
+  alb(AWS ALB Ingress)
 
-*Additional services can be added as new Deployments, routed through Ingress, and integrated with Redis/Postgres as needed.*
+  user --> alb
 
+  alb --> auth(Auth Service - Go)
+  alb --> fb(Feedback Service - Go)
+
+  auth --> redis[Redis Cache]
+  fb --> redis
+
+  auth --> authpg[(Postgres - Auth)]
+  fb --> fbpg[(Postgres - Feedback)]
