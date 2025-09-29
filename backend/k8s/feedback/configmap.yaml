@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: feedback-config
+data:
+  DB_HOST: feedback-db
+  DB_PORT: "5432"
+  POSTGRES_USER: feedback
+  POSTGRES_DB: feedback_db
+  REDIS_ADDR: redis:6379
