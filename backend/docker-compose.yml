@@ -41,7 +41,7 @@ services:
   # ---------- Services ----------
   auth-service:
     build:
-      context: ./          # 👈 project root (contains auth-service/, feedback-service/, shared/)
+      context: ./
       dockerfile: auth-service/Dockerfile
     environment:
       DB_HOST: auth-db
@@ -62,11 +62,14 @@ services:
 
   feedback-service:
     build:
-      context: ./          # 👈 same root
+      context: ./
       dockerfile: feedback-service/Dockerfile
     environment:
       DB_HOST: feedback-db
       DB_PORT: 5432
+      POSTGRES_USER: feedback
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: feedback_db
       DATABASE_URL: postgres://feedback:password@feedback-db:5432/feedback_db?sslmode=disable
       JWT_SECRET: supersecretkey
     depends_on:

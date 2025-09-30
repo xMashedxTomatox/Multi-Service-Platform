@@ -10,7 +10,14 @@ spec:
   rules:
     - http:
         paths:
-          - path: /auth
+          - path: /signup
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 80
+          - path: /login
             pathType: Prefix
             backend:
               service:

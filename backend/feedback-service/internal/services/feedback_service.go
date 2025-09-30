@@ -2,6 +2,7 @@ package services
 
 import (
 	"database/sql"
+
 	"github.com/xmashedxtomatox/feedback-service/internal/models"
 )
 
@@ -23,7 +24,7 @@ func (s *FeedbackService) CreateFeedback(userID int, message string) (models.Fee
 }
 
 func (s *FeedbackService) GetFeedbacks(userID int) ([]models.Feedback, error) {
-	rows, err := s.db.Query(`SELECT id, user_id, message, created_at FROM feedback WHERE user_id=$1`, userID)
+	rows, err := s.db.Query(`SELECT id, user_id, message, created_at FROM feedback ORDER BY created_at`)
 	if err != nil {
 		return nil, err
 	}

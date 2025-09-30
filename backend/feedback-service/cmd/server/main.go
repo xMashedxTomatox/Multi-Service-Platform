@@ -14,6 +14,7 @@ import (
 	"github.com/xmashedxtomatox/feedback-service/internal/services"
 
 	"github.com/xmashedxtomatox/shared/db"
+	shared_middleware "github.com/xmashedxtomatox/shared/middleware"
 )
 
 func main() {
@@ -48,5 +49,5 @@ func main() {
 	addr := fmt.Sprintf(":%s", port)
 
 	log.Printf("Feedback service running on %s\n", addr)
-	log.Fatal(http.ListenAndServe(addr, r))
+	log.Fatal(http.ListenAndServe(addr, shared_middleware.WithCORS(r)))
 }

@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -47,7 +48,7 @@ func JWTAuth(secret string, next http.Handler) http.Handler {
 			return
 		}
 
-		// Expiry
+		// Expiry check
 		if exp, ok := claims["exp"].(float64); ok {
 			if time.Now().Unix() > int64(exp) {
 				http.Error(w, "token expired", http.StatusUnauthorized)
@@ -58,16 +59,21 @@ func JWTAuth(secret string, next http.Handler) http.Handler {
 			return
 		}
 
-		// Extract user_id and role
-		userID, ok := claims["sub"].(float64)
+		// ✅ Extract user_id from string sub
+		sub, ok := claims["sub"].(string)
 		if !ok {
 			http.Error(w, "missing sub claim", http.StatusUnauthorized)
 			return
 		}
+		userID, err := strconv.Atoi(sub)
+		if err != nil {
+			http.Error(w, "invalid sub claim", http.StatusUnauthorized)
+			return
+		}
+
 		role, _ := claims["role"].(string)
 
-		// Inject into context
-		ctx := context.WithValue(r.Context(), ContextUserID, int(userID))
+		ctx := context.WithValue(r.Context(), ContextUserID, userID)
 		if role != "" {
 			ctx = context.WithValue(ctx, ContextRole, role)
 		}

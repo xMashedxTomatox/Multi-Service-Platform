@@ -9,6 +9,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/xmashedxtomatox/auth-service/internal/handlers"
 	"github.com/xmashedxtomatox/shared/db"
+	"github.com/xmashedxtomatox/shared/middleware"
 	"github.com/xmashedxtomatox/shared/redis"
 )
 
@@ -40,6 +41,6 @@ func main() {
 	}
 	addr := fmt.Sprintf(":%s", port)
 
-	log.Printf("Feedback service running on %s\n", addr)
-	log.Fatal(http.ListenAndServe(addr, r))
+	log.Printf("Auth service running on %s\n", addr)
+	log.Fatal(http.ListenAndServe(addr, middleware.WithCORS(r)))
 }
